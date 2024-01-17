@@ -3,7 +3,7 @@ using ShippingCompany;
 
 public class OrderController : ControllerBase 
 {
-    private readonly IOrderService _orderService;
+    protected readonly IOrderService _orderService;
 
     public OrderController(IOrderService orderService)
     {
@@ -12,14 +12,14 @@ public class OrderController : ControllerBase
 
     [HttpPost]
     
-    public IActionResult PostOrder([FromBody] Order order)
+    public virtual IActionResult PostOrder([FromBody] Order order)
     {
         _orderService.PostOrder(order);
         return Ok();
     }
 
     [HttpGet]
-    public IEnumerable<Order> GetOrders()
+    public virtual IEnumerable<Order> GetOrders()
     {
         var orders =_orderService.GetOrders();
 

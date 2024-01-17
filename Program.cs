@@ -4,12 +4,12 @@ using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string redisCnxString = builder.Configuration["RedisCnxString"];
+string redisCnxString = builder.Configuration["RedisCnxString"] ?? "localhost:6379";
 var multiplexer = ConnectionMultiplexer.Connect(redisCnxString);
 builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 builder.Services.AddSingleton<IOrderService, OrderService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddXmlSerializerFormatters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
