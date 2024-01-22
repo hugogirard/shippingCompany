@@ -12,4 +12,20 @@ public class GlobalEnvoieController : OrderController
     {
     }
    
+    [HttpPost]
+    [Consumes("application/xml")]
+    override public IActionResult PostOrder([FromBody] Order order)
+    {
+        return base.PostOrder(order);
+    }
+
+    [HttpGet]
+    [Produces("application/xml")]
+    override public IEnumerable<Order> GetOrders()
+    {
+        var orders =_orderService.GetOrders();
+
+        return orders;
+    }
+
 }
