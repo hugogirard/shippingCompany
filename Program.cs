@@ -9,7 +9,11 @@ var multiplexer = ConnectionMultiplexer.Connect(redisCnxString);
 builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 builder.Services.AddSingleton<IOrderService, OrderService>();
 
-builder.Services.AddControllers().AddXmlSerializerFormatters();
+builder.Services.AddControllers(o => 
+        {
+            o.InputFormatters.Add(new XmlNoNameSpaceInputFormatter(o));
+        })
+        .AddXmlSerializerFormatters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
