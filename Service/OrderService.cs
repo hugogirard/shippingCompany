@@ -16,13 +16,13 @@ public class OrderService : IOrderService
         _database = connectionMultiplexer.GetDatabase();
     }
 
-    public void PostOrder(Order order)
+    public async Task PostOrder(Order order)
     {
         var orderJson = JsonSerializer.Serialize(order);
-        _database.StringSet(order.OrderDetail.ReqID, orderJson, TimeSpan.FromMinutes(10));
+        await _database.StringSetAsync(order.OrderDetail.ReqID, orderJson, TimeSpan.FromMinutes(10));
     }
 
-    public IEnumerable<Order> GetOrders()
+    public async Task<IEnumerable<Order>> GetOrders()
     {
         var endpoints = _database.Multiplexer.GetEndPoints();
         var server = _database.Multiplexer.GetServer(endpoints[0]);
@@ -31,8 +31,31 @@ public class OrderService : IOrderService
 
         foreach (var key in keys)
         {
-            var orderJson = _database.StringGet(key);
+            var orderJson = await _database.StringGetAsync(key);
             var order = JsonSerializer.Deserialize<Order>(orderJson);
+            orders.Add(order);
+        }
+
+        return orders;
+    }
+
+    public async Task PostOrder(Root root)
+    {
+        var orderJson = JsonSerializer.Serialize(root);
+        await _database.StringSetAsync(root.Order.OrderDetail.ReqID, orderJson, TimeSpan.FromMinutes(10));
+    }
+
+    public async Task<IEnumerable<Root>> GetOrdersLivraisonRapide()
+    {
+        var endpoints = _database.Multiplexer.GetEndPoints();
+        var server = _database.Multiplexer.GetServer(endpoints[0]);
+        var keys = server.Keys();
+        var orders = new List<Root>();
+
+        foreach (var key in keys)
+        {
+            var orderJson = await _database.StringGetAsync(key);
+            var order = JsonSerializer.Deserialize<Root>(orderJson);
             orders.Add(order);
         }
 

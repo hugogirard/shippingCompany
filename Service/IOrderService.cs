@@ -2,7 +2,11 @@ namespace ShippingCompany;
 
 public interface IOrderService 
 {
-    void PostOrder(Order order);
+    Task PostOrder(Order order);
 
-    IEnumerable<Order> GetOrders();
+    Task<IEnumerable<Order>> GetOrders();
+
+    Task PostOrder(Root root);
+
+    Task<IEnumerable<Root>> GetOrdersLivraisonRapide();    
 }

@@ -6,24 +6,28 @@ namespace ShippingCompany.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GlobalEnvoieController : OrderController
+public class GlobalEnvoieController : ControllerBase
 {
-    public GlobalEnvoieController(IOrderService orderService) : base(orderService)
+    private readonly IOrderService _orderService;
+
+    public GlobalEnvoieController(IOrderService orderService)
     {
+        _orderService = orderService;
     }
    
     [HttpPost]
     [Consumes("application/xml")]
-    override public IActionResult PostOrder([FromBody] Order order)
+    public async Task<IActionResult> PostOrder([FromBody] Order order)
     {
-        return base.PostOrder(order);
+        await _orderService.PostOrder(order);
+        return Ok();
     }
 
     [HttpGet]
     [Produces("application/xml")]
-    override public IEnumerable<Order> GetOrders()
+    public async Task<IEnumerable<Order>> GetOrders()
     {
-        var orders =_orderService.GetOrders();
+        var orders = await _orderService.GetOrders();
 
         return orders;
     }
