@@ -25,7 +25,7 @@ public class OrderDetail
 
     [XmlElement(ElementName = "OrderDate")]
     [JsonProperty("OrderDate")]
-    public DateTime OrderDate { get; set; }
+    public string OrderDate { get; set; }
 
     [XmlElement(ElementName = "OrderedBy")]
     [JsonProperty("OrderedBy")]
